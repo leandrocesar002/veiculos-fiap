@@ -1,0 +1,38 @@
+curl criar venda
+curl --location 'http://localhost:4000/vendas' \
+--header 'Content-Type: application/json' \
+--data '{"veiculo_id": "7325fa2b-5a01-4a1f-8bf1-e00745d1ee85", "cpf_comprador": "47502862811", "data_venda": "2025-02-01"}'
+
+
+
+curl get carro unico
+curl --location 'http://localhost:3000/api/veiculos/7325fa2b-5a01-4a1f-8bf1-e00745d1ee85'
+
+
+
+curl listar vendas 
+curl --location 'http://localhost:4000/vendas'
+
+
+
+curl criar pagamento
+curl --location 'http://localhost:4000/pagamentos' \
+--header 'Content-Type: application/json' \
+--data '{"venda_id": "e400c72d-090d-412e-829f-edd50990b18e", "codigo_pagamento": "1234", "status_pagamento": "pendente"}'
+
+
+curl listar pagamentos
+curl -X GET http://localhost:4000/pagamentos
+
+
+
+curl cadastrar veiculos
+curl --location 'http://localhost:3000/api/veiculos' \
+--header 'Content-Type: application/json' \
+--data '{
+           "marca": "Toyota",
+           "modelo": "Corolla",
+           "ano": 2021,
+           "cor": "Branco",
+           "preco": 120000
+         }'

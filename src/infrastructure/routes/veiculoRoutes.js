@@ -3,6 +3,7 @@ const router = express.Router();
 const cadastrarVeiculo = require('../../application/cadastrarVeiculo');
 const listarVeiculos = require('../../application/listarVeiculos');
 const editarVeiculo = require('../../application/editarVeiculo');
+const listarVeiculoId = require('../../application/listarVeiculoId');
 
 // Rota para cadastrar um veículo (POST /api/veiculos)
 router.post('/', async (req, res) => {
@@ -19,6 +20,22 @@ router.get('/', async (req, res) => {
     try {
         const veiculos = await listarVeiculos();
         res.status(200).json(veiculos);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const veiculo = await listarVeiculoId(id);
+
+        if (!veiculo) {
+            return res.status(404).json({ message: "Veículo não encontrado" });
+        }
+
+        res.status(200).json(veiculo);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
