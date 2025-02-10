@@ -39,10 +39,10 @@ jobs:
       - name: 🔀 Criar Pull Request automaticamente
         uses: peter-evans/create-pull-request@v5
         with:
-          branch: main
-          base: main
+          base: main 
+          branch: ${{ github.ref_name }}  
           title: "🚀 Atualização automática para a main"
           body: "Este PR foi criado automaticamente após passar nos testes e no build."
           labels: "automerge"
-          reviewers: "leandrocesar002"  
+          reviewers: "leandrocesar002"  # Substitua pelo seu usuário do GitHub
           token: ${{ secrets.GITHUB_TOKEN }}
