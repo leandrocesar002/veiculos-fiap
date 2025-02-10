@@ -14,7 +14,13 @@ async function cadastrarVeiculo(dados) {
     try {
         const { marca, modelo, ano, cor, preco } = dados;
 
-        if (!marca || !modelo || !ano || !cor || !preco) {
+        // Primeiro, valida se o preço é um número positivo
+        if (typeof preco !== 'number' || preco <= 0) {
+            throw new Error('O campo "preco" deve ser um número positivo.');
+        }
+
+        // Agora valida os outros campos obrigatórios
+        if (!marca || !modelo || !ano || !cor || preco == null) {
             throw new Error('Todos os campos (marca, modelo, ano, cor, preco) são obrigatórios.');
         }
 
@@ -22,17 +28,12 @@ async function cadastrarVeiculo(dados) {
             throw new Error('O campo "ano" deve ser um número válido.');
         }
 
-        if (typeof preco !== 'number' || preco <= 0) {
-            throw new Error('O campo "preco" deve ser um número positivo.');
-        }
-
-        // Cria o veículo no banco de dados
-        const veiculo = await VeiculoModel.create(dados);
-        return veiculo;
+        return await VeiculoModel.create(dados);
     } catch (error) {
         console.error('Erro ao cadastrar veículo:', error.message);
-        throw new Error('Não foi possível cadastrar o veículo. Verifique os dados enviados.');
+        throw error;
     }
 }
+
 
 module.exports = cadastrarVeiculo;

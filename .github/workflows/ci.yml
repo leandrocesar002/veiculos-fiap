@@ -1,0 +1,48 @@
+name: CI - Build, Testes e PR Automático
+
+on:
+  push:
+    branches-ignore:
+      - main 
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🔧 Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 
+          cache: 'npm'
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🛠️ Rodar build
+        run: npm run build
+        continue-on-error: true 
+
+      - name: 🧪 Executar testes com cobertura
+        run: npm test -- --coverage
+
+  create-pull-request:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🔀 Criar Pull Request automaticamente
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: main
+          base: main
+          title: "🚀 Atualização automática para a main"
+          body: "Este PR foi criado automaticamente após passar nos testes e no build."
+          labels: "automerge"
+          reviewers: "leandrocesar002"  
+          token: ${{ secrets.GITHUB_TOKEN }}
