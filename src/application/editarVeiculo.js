@@ -1,11 +1,12 @@
 const VeiculoModel = require('../infrastructure/database/models/VeiculoModel');
 
 async function editarVeiculo(id, dadosAtualizados) {
+    const veiculo = await VeiculoModel.findByPk(id);
+    if (!veiculo) {
+        throw new Error('Veículo não encontrado.');
+    }
+
     try {
-        const veiculo = await VeiculoModel.findByPk(id);
-        if (!veiculo) {
-            throw new Error('Veículo não encontrado.');
-        }
         await veiculo.update(dadosAtualizados);
         return veiculo;
     } catch (error) {

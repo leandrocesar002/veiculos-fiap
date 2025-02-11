@@ -1,0 +1,35 @@
+name: 🚀 Build e Push Docker para AWS ECR
+
+on:
+  push:
+    branches:
+      - main 
+
+env:
+  AWS_REGION: us-east-1  
+  ECR_REPOSITORY: meu-repositorio 
+  IMAGE_TAG: latest 
+
+jobs:
+  build-and-push:
+    name: 🐳 Build e Push Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🔐 Login na AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
+          region: ${{ env.AWS_REGION }}
+
+      - name: 🏗️ Construir imagem Docker
+        run: |
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: 🚀 Enviar imagem Docker para o ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
