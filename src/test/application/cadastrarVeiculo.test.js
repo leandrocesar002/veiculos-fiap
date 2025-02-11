@@ -51,4 +51,6 @@ describe("Testes para cadastrarVeiculo", () => {
             .rejects.toThrow('O campo "preco" deve ser um número positivo.');
     });
 
+    
+
 });
