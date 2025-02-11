@@ -29,20 +29,4 @@ jobs:
       - name: 🧪 Executar testes com cobertura
         run: npm test -- --coverage
 
-  create-pull-request:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout do código
-        uses: actions/checkout@v3
-
-      - name: 🔀 Criar Pull Request automaticamente
-        uses: peter-evans/create-pull-request@v5
-        with:
-          base: main 
-          branch: ${{ github.ref_name }}  
-          title: "🚀 Atualização automática para a main"
-          body: "Este PR foi criado automaticamente após passar nos testes e no build."
-          labels: "automerge"
-          reviewers: "leandrocesar002"  # Substitua pelo seu usuário do GitHub
-          token: ${{ secrets.GITHUB_TOKEN }}
+  
